@@ -2,12 +2,12 @@
 
 ## Description
 
-This calculator is meant to assist all **Satisfactorians** helping plan their awesome factories. A [Sankey diagram](https://en.wikipedia.org/wiki/Sankey_diagram) helps to visualize the amount of material flow. Unwanted products can be hidden intuitively to focus on relevant ones.
+This calculator is meant to assist all **Satisfactorians** helping plan their awesome factories. A [Sankey diagram](https://en.wikipedia.org/wiki/Sankey_diagram) can be used to visualize the amount of material flow. Unwanted products can be hidden intuitively to focus on relevant ones.
 
 ## Setup 
 
 This implementation is based on JavaScript and requires a web server to be run on and a browser of your choice to be displayed.
-For further information see e.g. [apache tutorial](https://ubuntu.com/tutorials/install-and-configure-apache#1-overview) to setup your own web server.
+For further information see e.g. [Apache tutorial](https://ubuntu.com/tutorials/install-and-configure-apache#1-overview) to setup your own web server.
 
 ## Live Versions
 
@@ -52,11 +52,12 @@ Recipes for Version 1.0 with FICSMAS holiday special are included.
 
 ## Known issues
 
-* Only one receipt per product can be selected, no mixture is possible
+* Only one recipe per product can be selected, no mixture is possible
+  * This limitation doesn't apply to Kirk's latest version.
 
 Feel free to create issues if you have any problems.
 
-## Acknowledgment
+## Acknowledgments
 
-This implementation is based on the [factorio-calculator](https://github.com/KirkMcDonald/kirkmcdonald.github.io) by KirkMcDonald.<br>
+This implementation is based on the [factorio-](https://github.com/KirkMcDonald/kirkmcdonald.github.io) and [satisfactory-](https://github.com/KirkMcDonald/satisfactory-calculator) calculators by KirkMcDonald.<br>
 Recipes and icons are from [Satisfactory-Wiki](https://satisfactory.wiki.gg).
