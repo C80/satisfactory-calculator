@@ -2,7 +2,7 @@
 
 ## Description
 
-This calculator is meant to help all **Satisfactorians** helping plan their awesome factories. A [Sankey diagram](https://en.wikipedia.org/wiki/Sankey_diagram) helps to visualize the amount of material flow. Unwanted products can be hidden intuitively to focus on relevant ones.
+This calculator is meant to assist all **Satisfactorians** helping plan their awesome factories. A [Sankey diagram](https://en.wikipedia.org/wiki/Sankey_diagram) helps to visualize the amount of material flow. Unwanted products can be hidden intuitively to focus on relevant ones.
 
 ## Setup 
 
@@ -19,7 +19,7 @@ Live version can be found here:
 
 ## Content
 
-Receipes for Version 1.0 with FICSMAS holiday special are included.
+Recipes for Version 1.0 with FICSMAS holiday special are included.
 
 ### Updates:
 
@@ -32,17 +32,17 @@ Receipes for Version 1.0 with FICSMAS holiday special are included.
 * 17.12.2022 
   * Update 7 content:
     * Reduce water usage of nuclear power plants
-    * Formular update for overclocking
+    * Formula update for overclocking
   * Rename Organic Data Capsule to Alien DNA Capsule
 * 20.09.2022 
   * Including iron rebar to update5
   * Rename of Rifle Cartridge to Rifle Ammo
   * Update 6 content:
-    * New ammunition types, recipies
+    * New ammunition types, recipes
     * New creature drops
     * Icons
 * 04.11.2021 
-  * Fixing receipe resolution with manual ingredient
+  * Fixing recipe resolution with manual ingredient
   * Introduction of new *manual* building
   * Fixes of chosen pipe in URL-settings
   * Some error fixes in backwards compatibility with older data files
@@ -59,4 +59,4 @@ Feel free to create issues if you have any problems.
 ## Acknowledgment
 
 This implementation is based on the [factorio-calculator](https://github.com/KirkMcDonald/kirkmcdonald.github.io) by KirkMcDonald.<br>
-Receipes and icons are from [Satisfactory-Wiki](https://satisfactory.wiki.gg).
+Recipes and icons are from [Satisfactory-Wiki](https://satisfactory.wiki.gg).
