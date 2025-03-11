@@ -12,8 +12,10 @@ For further information see e.g. [apache tutorial](https://ubuntu.com/tutorials/
 ## Live Versions
 
 Live version can be found here:
-[Stable Version](https://tadeaustria.github.io/satisfactory-calculator/calc.html)
-[Experimental Version](http://barthler.ddns.net/satisfactory-calculator-experimental/calc.html)
+* [KirkMcDonald - Most Feature-Rich](https://kirkmcdonald.github.io/satisfactory-calculator/calc.html)
+* [TadeAustria - Stable Version](https://tadeaustria.github.io/satisfactory-calculator/calc.html)
+* [TadeAustria - Experimental Version](http://barthler.ddns.net/satisfactory-calculator-experimental/calc.html)
+* [Zeratax - Stale](https://zeratax.github.io/satisfactory-calculator/calc.html)
 
 ## Content
 
