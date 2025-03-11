@@ -19,9 +19,9 @@ import { BuildTarget } from "./target.js"
 import { Totals } from "./totals.js"
 import { renderTotals } from "./visualize.js"
 
-const DEFAULT_ITEM_KEY = "supercomputer"
+const DEFAULT_ITEM_KEY = "nuclear-fuel-rod"
 
-let minerCategories = new Set(["mineral", "oil", "water"])
+let minerCategories = new Set(["mineral", "oil", "water", "gift-tree", "fluid", "manual", "hog", "spitter", "hatcher", "stinger", "converter-creation"])
 
 export let resourcePurities = [
     {key: "0", name: "Impure", factor: half},
@@ -32,14 +32,18 @@ export let resourcePurities = [
 export let DEFAULT_PURITY = resourcePurities[1]
 
 export let DEFAULT_BELT = "belt1"
+export let DEFAULT_PIPE = "pipe1"
 
 class FactorySpecification {
     constructor() {
+        this.datafile = null
+
         // Game data definitions
         this.items = null
         this.recipes = null
         this.buildings = null
         this.belts = null
+        this.pipes = null
 
         this.itemTiers = []
 
@@ -56,12 +60,14 @@ class FactorySpecification {
         this.altRecipes = new Map()
 
         this.belt = null
+        this.pipe = null
 
         this.ignore = new Set()
 
         this.format = new Formatter()
     }
-    setData(items, recipes, buildings, belts) {
+    setData(datafile, items, recipes, buildings, belts, pipes) {
+        this.datafile = datafile
         this.items = items
         let tierMap = new Map()
         for (let [itemKey, item] of items) {
@@ -92,6 +98,8 @@ class FactorySpecification {
         }
         this.belts = belts
         this.belt = belts.get(DEFAULT_BELT)
+        this.pipes = pipes
+        this.pipe = pipes.get(DEFAULT_PIPE)
         this.initMinerSettings()
     }
     initMinerSettings() {
@@ -150,6 +158,7 @@ class FactorySpecification {
     getRecipeRate(recipe) {
         let building = this.getBuilding(recipe)
         if (building === null) {
+            console.log("Building for recipe " + recipe.name + " not found");
             return null
         }
         return building.getRecipeRate(this, recipe)
@@ -163,6 +172,7 @@ class FactorySpecification {
     getCount(recipe, rate) {
         let building = this.getBuilding(recipe)
         if (building === null) {
+            console.log("Building for recipe " + recipe.name + " not found");
             return zero
         }
         return building.getCount(this, recipe, rate)
@@ -170,14 +180,26 @@ class FactorySpecification {
     getBeltCount(rate) {
         return rate.div(this.belt.rate)
     }
+    getPipeCount(rate) {
+        return rate.div(this.pipe.rate)
+    }
     getPowerUsage(recipe, rate, itemCount) {
         let building = this.getBuilding(recipe)
         if (building === null || this.ignore.has(recipe)) {
             return {average: zero, peak: zero}
         }
+        let average = building.power
+        let peak = building.power
+
+        // For particle accelerator the recipe determines the power usage
+        if (building.isParticleAccelerator()){
+            average = recipe.averagePower
+            peak = recipe.maximumPower
+        }
+
         let count = this.getCount(recipe, rate)
-        let average = building.power.mul(count)
-        let peak = building.power.mul(count.ceil())
+        average = average.mul(count)
+        peak = peak.mul(count.ceil())
         let overclock = this.overclock.get(recipe)
         if (overclock !== undefined) {
             // The result of this exponent will typically be irrational, so
@@ -185,17 +207,20 @@ class FactorySpecification {
             // to the range [0.01, 2.50], any imprecision introduced by this
             // approximation is minimal (and is probably less than is present
             // in the game itself).
-            let overclockFactor = Rational.from_float(Math.pow(overclock.toFloat(), 1.6))
+            let exponent = 1.6
+            if (this.datafile == 'data/update7.json')
+                exponent = 1.321928
+            let overclockFactor = Rational.from_float(Math.pow(overclock.toFloat(), exponent))
             average = average.mul(overclockFactor)
             peak = peak.mul(overclockFactor)
         }
         return {average, peak}
     }
     addTarget(itemKey) {
-        if (itemKey === undefined) {
-            itemKey = DEFAULT_ITEM_KEY
-        }
         let item = this.items.get(itemKey)
+        if (item === undefined){
+            item = this.items.get(DEFAULT_ITEM_KEY)
+        }
         let target = new BuildTarget(this.buildTargets.length, itemKey, item, this.itemTiers)
         this.buildTargets.push(target)
         d3.select("#targets").insert(() => target.element, "#plusButton")
@@ -218,8 +243,15 @@ class FactorySpecification {
     solve() {
         let totals = new Totals()
         for (let target of this.buildTargets) {
-            let subtotals = target.item.produce(this, target.getRate(), this.ignore)
-            totals.combine(subtotals)
+            target.item.produce(this, this.ignore, totals, 0)
+            totals.solver.addWanted(target.item, target.getRate())
+        }
+        for(let rec of totals.solver.recipes){
+            rec.addToSolver(this, totals.solver, this.ignore)
+        }
+        totals.solutionVector = totals.solver.calculate()
+        for(let rec of totals.solver.recipeIndices.keys()){
+            totals.add(rec, this.getRecipeRate(rec).mul(totals.getBuildingFactor(rec)))
         }
         return totals
     }
